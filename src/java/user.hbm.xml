@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping>
+	<class name="dtx.rbac.bean.User" table="user">
+		<id name="uuid" column="uuid">
+			<generator class="uuid"></generator>
+		</id>
+		<property name="account">
+			<column name="account" not-null="true" unique="true" />
+		</property>
+		<property name="password">
+			<column name="password" not-null="true" />
+		</property>
+		<property name="createTime" type="timestamp" generated="insert">
+			<column name="create_time" not-null="true" default="CURRENT_TIMESTAMP" />
+		</property>
+		<property name="loginTime" type="timestamp" column="login_time"></property>
+		<property name="loginIp" column="login_ip"></property>
+		<property name="status">
+			<column name="status" not-null="true" default="false" />
+		</property>
+		<property name="remark" column="remark"></property>
+	</class>
+</hibernate-mapping>

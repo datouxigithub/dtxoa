@@ -1,0 +1,728 @@
+#set($path="../")
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0">
+
+        <title>后台管理系统</title>
+        <meta name="description" content="页面描述" />
+        <meta name="keywords" content="关键词" />
+        <meta name="author" content="大头希" />
+
+        <!-- Fonts -->  
+        <link href="${path}assets/css/oxygen.css" rel="stylesheet" type="text/css">
+        <link href="${path}assets/css/source_sans_pro.css" rel="stylesheet" type="text/css">
+        <!-- End Fonts -->
+
+        <!--
+        <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/ionicons/1.4.1/css/ionicons.min.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/animate.css/3.1.1/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/chosen/1.6.0/chosen.min.css" />
+        -->
+
+        <link rel="stylesheet" type="text/css" href="${path}assets/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="${path}assets/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="${path}assets/css/ionicons.min.css" />
+        <link rel="stylesheet" type="text/css" href="${path}assets/css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="${path}assets/css/bootstrapValidator.min.css" />
+        <link rel="stylesheet" type="text/css" href="${path}assets/css/bootstrap-switch.min.css" />
+        <link rel="stylesheet" type="text/css" href="${path}assets/css/chosen.min.css" />
+
+        <link rel="stylesheet" type="text/css" href="${path}assets/css/style.css" />
+
+        <!--
+        <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <script src="http://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js"></script>
+        <script src="http://cdn.bootcss.com/chosen/1.6.0/chosen.jquery.min.js"></script>
+        -->
+
+        <script src="${path}assets/script/jquery.min.js"></script>
+        <script src="${path}assets/script/bootstrap.min.js"></script>
+        <script src="${path}assets/script/bootstrapValidator.min.js"></script>
+        <script src="${path}assets/script/bootstrap-switch.min.js"></script>
+        <script src="${path}assets/script/chosen.jquery.min.js"></script>
+    </head>
+
+    <body class="header-fixed skin-blue">
+        <header class="container-fluid clear_padding">
+            <a class="logo hidden-xs" href="javascript:void(0)">
+                <span class="icon"><i class="fa fa-cube"></i> Logo</span>
+            </a>
+            <nav class="navbar-main" role="navigation">
+                <ul class="nav navbar-nav pull-left clear_margin">
+                    <li>
+                        <a id="sidebar-left-controll" class="text-center collapsed" data-target=".sidebar-left" data-toggle="collapse">
+                            <span class="sr-only">左导航标签</span>
+                            <span class="fa fa-bars"></span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav2 navbar-nav pull-right clear_margin">
+                    <li>
+                        <a id="sidebar-right-controll" class="text-center collapsed" data-target=".sidebarRight" data-toggle="collapse">
+                            <span class="sr-only">右导航标签</span>
+                            <span class="fa fa-bullhorn"></span>
+                        </a>
+                    </li>
+                    <li class="dropdown sidebarRight chat-search collapse clear_margin hidden-xs in">
+                        <form class="search-form" role="search">
+                            <input class="form-control" type="text" placeholder="Search user..." />
+                        </form>
+                    </li>
+                </ul>
+                <div class="nav-content">
+                    <h3 style="color: white">测试标题</h3>
+                </div>
+            </nav>
+        </header>
+        
+        <!-- sidebar-left -->
+        <aside class="sidebar sidebar-left collapse in">
+            <div class="sidebar-wrapper">
+                <div class="sidebar-pannel">
+                    <ul class="nav-buttons">
+                        <li class="nav-button dropdown">
+                            <a data-toggle="dropdown" href="javascript:void(0);">
+                                <i class="ion-android-inbox nav-button-icon"></i>
+                                <span class="badge bg-light-red">24</span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeIn" role="menu">
+                                <li class="nav-button-dropdown-menu-title"><h4>Messages</h4></li>
+                                <li class="divider clear_margin"></li>
+                                <div class="slimScrollBar">
+                                    <li class="unread">
+                                        <div class="media">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/1.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h4 class="info clear_margin"><b>Kevin Mckoy</b></h4>
+                                                <h6 class="info clear_margin">Server Upgrade Estimates</h6>
+                                                <p class="help-block info clear_margin">today at 10:15 AM</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li class="unread">
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/2.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h4 class="info clear_margin"><b>Jack Patillo</b></h4>
+                                                <h6 class="info clear_margin">Brunch RSVP</h6>
+                                                <p class="help-block info clear_margin">today at 8:45 AM</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li>
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/3.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h4 class="info clear_margin"><b>Kara Finkely</b></h4>
+                                                <h6 class="info clear_margin">System Downtime Report</h6>
+                                                <p class="help-block info clear_margin">yesterday at 9:18 PM</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li>
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/4.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h4 class="info clear_margin"><b>Gavin Free</b></h4>
+                                                <h6 class="info clear_margin">Video Ad: Revision 3</h6>
+                                                <p class="help-block info clear_margin">yesterday at 3:20 AM</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li>
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/5.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h4 class="info clear_margin"><b>Geoff Ramsey</b></h4>
+                                                <h6 class="info clear_margin">New Intern Info.</h6>
+                                                <p class="help-block info clear_margin">2 days ago at 4:30 PM</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </div>
+                                <li class="divider clear_margin clear_padding"></li>
+                                <li>
+                                    <a class="btn btn-default clear_margin nav-button-dropdown-menu-bottom-btn" href="javascript:void(0)">View All Messages</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-button dropdown">
+                            <a data-toggle="dropdown" href="javascript:void(0)">
+                                <i class="fa fa-bell icon nav-button-icon"></i>
+                                <span class="badge bg-green">99+</span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeIn" role="menu">
+                                <li class="nav-button-dropdown-menu-title"><h4>Notification</h4></li>
+                                <li class="divider" style="margin: 0"></li>
+                                <div class="slimScrollBar">
+                                    <li class="unread">
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/5.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="info clear_margin"><b>Geoff Ramsey</b></h5>
+                                                <p class="help-block info clear_margin">5 seconds ago</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li class="unread">
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/6.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="info clear_margin"><b>Meeting for Team Leaders</b></h5>
+                                                <p class="help-block info clear_margin">5 seconds ago</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li>
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/5.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="info clear_margin"><b>Gavino Free</b> turned in Module 219A of Project #32</h5>
+                                                <p class="help-block info clear_margin">5 seconds ago</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li>
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/4.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="info clear_margin"><b>Yanique Robinson</b> updated her Profile Avatar</h5>
+                                                <p class="help-block info clear_margin">5 seconds ago</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </div>
+                                <li class="divider clear_margin clear_padding"></li>
+                                <li>
+                                    <a class="btn btn-default clear_margin nav-button-dropdown-menu-bottom-btn" href="javascript:void(0)">View All Notifications</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-button dropdown">
+                            <a data-toggle="dropdown" href="javascript:void(0)">
+                                <i class="fa fa-comments-o icon nav-button-icon"></i>
+                                <span class="badge bg-blue">4</span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeIn" role="menu">
+                                <li class="nav-button-dropdown-menu-title"><h4>Recent Chats</h4></li>
+                                <li class="divider clear_margin"></li>
+                                <div class="slimScrollBar">
+                                    <li class="unread">
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/2.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="info clear_margin"><b>Gavin Free</b><i class="badge bg-green">4</i></h5>
+                                                <p class="help-block info clear_margin">5 seconds ago</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li class="unread">
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/3.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="info clear_margin"><b>Yanique Robinson</b><i class="badge bg-light-orange">2</i></h5>
+                                                <p class="help-block info clear_margin">5 seconds ago</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li>
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/4.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="info clear_margin">Ryan Haywood <i class="badge">4</i></h5>
+                                                <p class="help-block info clear_margin">5 seconds ago</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider clear_margin clear_padding"></li>
+                                    <li>
+                                        <div class="media" style="width: 100%;">
+                                            <a class="media-left" href="#">
+                                                <img class="media-object" style="width: 40px;height: 40px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/5.jpg" data-holder-rendered="true"></img> 
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="info clear_margin">Geoff Ramsey<i class="badge">4</i></h5>
+                                                <p class="help-block info clear_margin">5 seconds ago</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </div>
+                                <li class="divider clear_margin clear_padding"></li>
+                                <li>
+                                    <a class="btn btn-default clear_margin nav-button-dropdown-menu-bottom-btn" href="javascript:void(0)">View All Chat Sessions</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-button dropdown">
+                            <a data-toggle="dropdown" href="javascript:void(0)">
+                                <i class="fa fa-hdd-o icon nav-button-icon"></i>
+                                <span class="badge bg-light-orange">!2</span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeIn" role="menu">
+                                <li class="nav-button-dropdown-menu-title"><h4>System Status</h4></li>
+                                <li class="divider" style="margin: 0"></li>
+                                <div class="slimScrollBar">
+                                    
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-6">
+                                                <a class="text-center" href="javascript:void(0)">
+                                                    <div style="width: 100%;display: block;margin: 0 auto;text-overflow: ellipsis;vertical-align: middle">
+                                                        Server status
+                                                    </div>
+                                                    <i style="width: 125px;height: 100px;font-size: 72px;line-height: 100px;display: block;margin: 0 auto;" class="fa fa-desktop icon"></i>
+                                                    <div style="width: 100%;display: block;margin: 0 auto;text-overflow: ellipsis;vertical-align: middle">
+                                                       <i class="fa fa-circle text-success"></i>  Online
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            
+                                            <div class="col-xs-12 col-md-6">
+                                                <a class="text-center" href="javascript:void(0)">
+                                                    <div style="width: 100%;display: block;margin: 0 auto;text-overflow: ellipsis;vertical-align: middle">
+                                                        Storage (67%)
+                                                    </div>
+                                                    <i style="width: 125px;height: 100px;font-size: 72px;line-height: 100px;display: block;margin: 0 auto;" class="fa fa-hdd-o icon"></i>
+                                                    <div style="width: 100%;display: block;margin: 0 auto;text-overflow: ellipsis;vertical-align: middle">
+                                                       <div class="progress">
+                                                        <div class="progress-bar bg-light-orange" style="width: 67%;" aria-valuemax="100" aria-valuemin="0" aria-valuenow="67" role="progressbar"></div>
+                                                    </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-6">
+                                                <a class="text-center" href="javascript:void(0)">
+                                                    <div style="width: 100%;display: block;margin: 0 auto;text-overflow: ellipsis;vertical-align: middle">
+                                                        Bandwidth (75%)
+                                                    </div>
+                                                    <i style="width: 125px;height: 100px;font-size: 72px;line-height: 100px;display: block;margin: 0 auto;" class="fa fa-dashboard icon"></i>
+                                                    <div style="width: 100%;display: block;margin: 0 auto;text-overflow: ellipsis;vertical-align: middle">
+                                                       <div class="progress">
+                                                        <div class="progress-bar bg-light-red" style="width: 91%;" aria-valuemax="100" aria-valuemin="0" aria-valuenow="91" role="progressbar"></div>
+                                                    </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            
+                                            <div class="col-xs-12 col-md-6">
+                                                <a class="text-center" href="javascript:void(0)">
+                                                    <div style="width: 100%;display: block;margin: 0 auto;text-overflow: ellipsis;vertical-align: middle">
+                                                        Cpu Load (20%)
+                                                    </div>
+                                                    <i style="width: 125px;height: 100px;font-size: 72px;line-height: 100px;display: block;margin: 0 auto;" class="fa fa-bar-chart-o icon"></i>
+                                                    <div style="width: 100%;display: block;margin: 0 auto;text-overflow: ellipsis;vertical-align: middle">
+                                                       <div class="progress">
+                                                        <div class="progress-bar bg-green" style="width: 20%;" aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" role="progressbar"></div>
+                                                    </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <li class="divider" style="margin: 0"></li>
+                                <li>
+                                    <a class="btn btn-default clear_margin nav-button-dropdown-menu-bottom-btn" href="javascript:void(0)">View All System Statistics</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="container-fluid">
+                    <div class="row dropdown" style="padding:0 20px 20px 20px;">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                            <img class="img-thumbnail bg-green pull-left" style="height: 50px;margin-right: 10px" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/1.jpg" />
+                            <div class="pull-left">
+                                <h4 style="color: #000;margin-top: 4px;margin-bottom: 6px;"><b>Kevin Mckoy</b></h4>
+                                <p class="help-block" style="margin-top: 4px;margin-bottom: 0">System Administrator</p>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" style="width: 100%;">
+                            <li><a href="javascript:void(0);"><i class="fa fa-user fa-fw icon"></i> Profile</a></li>
+                            <li><a href="javascript:void(0);"><i class="fa fa-cog fa-fw icon"></i> Account Settings</a></li>
+                            <li><a href="javascript:void(0);"><i class="fa fa-list fa-fw icon"></i> Activity Log</a></li>
+                            <li class="divider"></li>
+                            <li><a href="javascript:void(0);"><i class="fa fa-lock fa-fw icon"></i> Lock Account</a></li>
+                            <li><a href="javascript:void(0);"><i class="fa fa-sign-out fa-fw icon"></i> Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="container-fluid">
+                    <div class="row">
+                        <form class="search-form" style="padding: 20px;">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="search..." />
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="container-fluid">
+                    <div class="row">
+                        <ul class="list-group slimScrollBar" style="padding: 20px 0;">
+                            <li class="list-group-item clear_padding">
+                                <a href="javascript:void(0);"><i class="fa fa-lg fa-fw fa-dashboard"></i> Dashboard</a>
+                            </li>
+                            <li class="list-group-item clear_padding">
+                                <a data-toggle="collapse" href="#ui-sub-menu"><i class="fa fa-lg fa-fw fa-desktop"></i> UI Elements<i class="fa fa-caret-right pull-right"></i></a>
+                                <ul id="ui-sub-menu" class="list-group collapse clear_margin clear_border">
+                                    <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">General</a></li>
+                                    <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Buttons</a></li>
+                                    <li class="list-group-item clear_padding clear_border"><a data-toggle="collapse" href="#icons-sub-menu">Icons <i class="fa fa-caret-right pull-right"></i></a></li>
+                                    <ul id="icons-sub-menu" class="list-group collapse clear_margin clear_border">
+                                        <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">FontAwesome</a></li>
+                                        <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Ionicons</a></li>
+                                    </ul>
+                                    <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Navbar</a></li>
+                                    <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Modal</a></li>
+                                    <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Sliders</a></li>
+                                    <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Widgets</a></li>
+                                    <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Grid</a></li>
+                                    <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">ContentBox</a></li>
+                                    <li class="list-group-item clear_padding clear_border"><a data-toggle="collapse" href="#table-sub-menu">Table <i class="fa fa-caret-right pull-right"></i></a></li>
+                                    <ul id="table-sub-menu" class="list-group collapse clear_margin clear_border">
+                                        <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Tables</a></li>
+                                        <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Data Tables</a></li>
+                                    </ul>
+                                    <li class="list-group-item clear_padding clear_border"><a data-toggle="collapse" href="#form-sub-menu">Form <i class="fa fa-caret-right pull-right"></i></a></li>
+                                    <ul id="form-sub-menu" class="list-group collapse clear_margin clear_border">
+                                        <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Form Layout</a></li>
+                                        <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Form Elements</a></li>
+                                        <li class="list-group-item clear_padding clear_border"><a href="javascript:void(0);">Form Wizards</a></li>
+                                    </ul>
+                                </ul>
+                            </li>
+                            <li class="list-group-item clear_padding">
+                                <a href="javascript:void(0);"><i class="fa fa-lg fa-fw fa-file"></i> Pages<i class="fa fa-caret-right pull-right"></i></a>
+                            </li>
+                            <li class="list-group-item clear_padding">
+                                <a href="javascript:void(0);"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i> Charts<i class="fa fa-caret-right pull-right"></i></a>
+                            </li>
+                            <li class="list-group-item clear_padding">
+                                <a href="javascript:void(0);"><i class="fa fa-lg fa-fw fa-inbox"></i> Mail<span class="badge bg-light-red pull-right">24New</span></a>
+                            </li>
+                            <li class="list-group-item clear_padding">
+                                <a href="javascript:void(0);"><i class="fa fa-lg fa-fw fa-calendar"></i> Calender</a>
+                            </li>
+                            <li class="list-group-item clear_padding">
+                                <a href="javascript:void(0);"><i class="fa fa-lg fa-fw ion-android-sort"></i> Multi Level<i class="fa fa-caret-right pull-right"></i></a>
+                            </li>
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- -->
+        
+        <!-- sidebar-right -->
+        <aside class="sidebar sidebarRight collapse in" style="z-index: 1000">
+            <div class="sidebar-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <a style="display: block;margin-top: 20px;" data-toggle="collapse" data-target="#online-list" href="javascript:void(0)">
+                            <h3 style="margin-top: 0;margin-bottom: 15px;font-size: 16px;color: #454545;">
+                                <i class="fa fa-circle" style="color: #27AE60 !important;"></i>
+                                 Online (3)
+                            </h3>
+                        </a>
+                    </div>
+                    <ul id="online-list" class="list-group collapse in">
+                        <li class="row list-group-item">
+                            <a href="#" class="media">
+                                <div class="media-left"><img class="img-thumbnail bg-light-orange" style="max-height: 40px;" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/7.jpg" /></div>
+                                <div class="media-body">
+                                    <h4 class="media-heading clear_margin info">Kevin Mckoy</h4>
+                                    <p class="help-block clear_margin info">online</p>
+                                </div>
+                            </a>
+                            <i class="fa fa-mobile fa-fw pull-right"></i>
+                        </li>
+                        <li class="row list-group-item">
+                            <a href="#" class="media">
+                                <div class="media-left"><img class="img-thumbnail bg-light-orange" style="max-height: 40px;" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/6.jpg" /></div>
+                                <div class="media-body">
+                                    <h4 class="clear_margin info"><b>Barbara Dunkleman</b></h4>
+                                    <p class="help-block clear_margin info">last seen 1 minute ago</p>
+                                </div>
+                                
+                            </a>
+                            <div class="fa fa-laptop fa-fw pull-right"></div>
+                        </li>
+                        <li class="row list-group-item">
+                            <a href="#" class="media">
+                                <div class="media-left"><img class="img-thumbnail bg-light-orange" style="max-height: 40px;" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/7.jpg" /></div>
+                                <div class="media-body">
+                                    <h4 class="clear_margin info"><b>Gus Sorola</b></h4>
+                                    <p class="help-block clear_margin info">last seen 5 minute ago</p>
+                                </div>
+                                
+                            </a>
+                            <div class="fa fa-laptop fa-fw pull-right"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <a style="display: block;" data-toggle="collapse" data-target="#offline-list" href="javascript:void(0)">
+                            <h3 style="margin-top: 0;margin-bottom: 15px;font-size: 16px;color: #454545;">
+                                <i class="fa fa-circle" style="color: #D40D12 !important;"></i>
+                                 Offline (21)
+                            </h3>
+                        </a>
+                    </div>
+                    <ul id="offline-list" class="list-group collapse">
+                        <li class="row list-group-item">
+                            <a href="#" class="media">
+                                <div class="media-left"><img class="img-thumbnail" style="max-height: 40px;" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/7.jpg" /></div>
+                                <div class="media-body">
+                                    <h4 class="clear_margin info"><b>Gus Sorola</b></h4>
+                                    <p class="help-block clear_margin info">last seen 5 minute ago</p>
+                                </div>
+                                
+                            </a>
+                            <div class="fa fa-laptop fa-fw pull-right"></div>
+                        </li>
+                        <li class="row list-group-item">
+                            <a href="#" class="media">
+                                <div class="media-left"><img class="img-thumbnail" style="max-height: 40px;" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/7.jpg" /></div>
+                                <div class="media-body">
+                                    <h4 class="clear_margin info"><b>Gus Sorola</b></h4>
+                                    <p class="help-block clear_margin info">last seen 5 minute ago</p>
+                                </div>
+                                
+                            </a>
+                            <i class="fa fa-mobile fa-fw pull-right"></i>
+                        </li>
+                        <li class="row list-group-item">
+                            <a href="#" class="media">
+                                <div class="media-left"><img class="img-thumbnail" style="max-height: 40px;" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/7.jpg" /></div>
+                                <div class="media-body">
+                                    <h4 class="clear_margin info"><b>Gus Sorola</b></h4>
+                                    <p class="help-block clear_margin info">last seen 5 minute ago</p>
+                                </div>
+                                
+                            </a>
+                            <div class="fa fa-laptop fa-fw pull-right"></div>
+                        </li>
+                        <li class="row list-group-item">
+                            <a href="#" class="media">
+                                <div class="media-left"><img class="img-thumbnail" style="max-height: 40px;" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/7.jpg" /></div>
+                                <div class="media-body">
+                                    <h4 class="clear_margin info"><b>Gus Sorola</b></h4>
+                                    <p class="help-block clear_margin info">last seen 5 minute ago</p>
+                                </div>
+                                
+                            </a>
+                            <div class="fa fa-laptop fa-fw pull-right"></div>
+                        </li>
+                        <li class="row list-group-item">
+                            <a href="#" class="media">
+                                <div class="media-left"><img class="img-thumbnail" style="max-height: 40px;" src="http://demo.ztapps.com/curo/v1.1/assets/img/people/7.jpg" /></div>
+                                <div class="media-body">
+                                    <h4 class="clear_margin info"><b>Gus Sorola</b></h4>
+                                    <p class="help-block clear_margin info">last seen 5 minute ago</p>
+                                </div>
+                                
+                            </a>
+                            <div class="fa fa-laptop fa-fw pull-right"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        <!-- -->
+        
+        <!--页面主体-->
+        <aside class="content-wrapper" style="height: 100% !important;padding: 0;position: relative;margin-left: 240px;background: #FAFAFA none repeat scroll 0% 0%;min-height: 500px;transition: all 0.3s ease 0s">
+            <div class="content container-fluid animated fadeInUp collapse in" style="padding-top: 80px;max-width: 1200px;height: 100% !important;margin: 0 auto;transition: all 0.5s ease 0s;">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <form name="register-form" class="form-horizontal" role="form" action="${action}" method="post">
+                        <div class="panel-heading">
+                            <i style="font-size: 40px;" class="fa fa-user"></i>
+                            <div class="pull-right">
+                                <input type="checkbox" name="ison">
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-2 text-right" for="type">节点类型:</label>
+                                    <div class="col-sm-10">
+                                        <select name="type" class="form-control chzn-select">
+                                            #foreach($nodeType in $nodeTypes.entrySet())
+                                            <option value="${nodeType.key}" #if($nodeType.key==$editNode.getNodeType())selected#end>${nodeType.value}</option>
+                                            #end
+                                        </select>
+                                    </div>
+                                </div>
+                            <div class="form-group">
+                                    <label class="col-sm-2 text-right" for="parent">父节点:</label>
+                                    <div class="col-sm-10">
+                                        <select name="parent" class="form-control chzn-select">
+                                            <option value=""></option>
+                                            #set($level=0)
+                                            #macro(iter_parent $parents)
+                                                #foreach($pn in $parents.entrySet())
+                                                    #set($padding=$level*5)
+                                                    <option value="${pn.key.getUuid()}" style="padding-left: ${padding}px" #if($editNode.getParentId()==$pn.key.getUuid())selected#end>${pn.key.getTitle()}</option>
+                                                    #if($pn.value.entrySet().size()>0)
+                                                        #set($level=$level+1)
+                                                        #iter_parent($pn.value)
+                                                        #set($level=$level - 1)
+                                                    #end
+                                                #end
+                                            #end
+                                            #iter_parent($parents)
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 text-right" for="title">节点名称:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="title" class="form-control" placeholder="节点名称" #if($editNode.getTitle())value="${editNode.getTitle()}" readonly#end />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 text-right" for="address">节点地址:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="address" class="form-control" placeholder="节点地址" #if($editNode.getAddress())value="${editNode.getAddress()}" readonly#end />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 text-right" for="remark">注释:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="remark" placeholder="注释">#if($editNode.getRemark())${editNode.getRemark()}#end</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-success">提交</button>
+                                    <button type="reset" class="btn btn-primary">重置</button>
+                                </div>
+                            
+                        </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- -->
+    </body>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            "use strict";
+            
+            $('.chzn-select').chosen({
+                width:"100%"
+            });
+            
+            $("form[name='register-form']").bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields:{
+                  title:{
+                    message:'The title is not valid',
+                    validators:{
+                        notEmpty:{
+                            message:'节点名称不能为空'
+                        },
+                        threshold:1,
+                        remote:{
+                          url:"${request.getContextPath()}/validate/node-title-exists",
+                          message:"节点名称存在",
+                          delay:2000,
+                          type:'POST',
+                        },
+                    }
+                  },
+                  address:{
+                    validators:{
+                        callback:{
+                            message:"节点为空或节点地址已存在",
+                            callback:function(value,validator){
+                              if($("select[name='type']").val()==="2")return true;
+                              else{
+                                  var is_exists=false;
+                                  var result=$.ajax({
+                                      url:"${request.getContextPath()}/validate/node-address-exists",
+                                      type:"POST",
+                                      data:{
+                                        address:$("input[name='address']").val()  
+                                      },
+                                      async:false,
+                                      dataType:"json",
+                                      success:function(data,text_status,xhr){
+                                          is_exists=data.valid;
+                                      }
+                                  });
+                                  return is_exists;
+                              }
+                            },
+                        }
+                    }
+                  },
+                },
+            });
+            
+            $("[name='ison']").bootstrapSwitch({
+                onText:'启用',
+                offText:'禁用',
+                onColor:'success',
+                offColor:'warning',
+                state:#ifnotnull($editNode.getStatus()) ${editNode.getStatus()}#end #ifnull($editNode.getStatus()) false#end,
+            });
+        });
+    </script>
+</html>
