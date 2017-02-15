@@ -9,9 +9,13 @@ import dtx.db.ControllerFactory;
 import dtx.rbac.bean.Node;
 import dtx.rbac.bean.Role;
 import dtx.rbac.bean.RoleNode;
+import dtx.rbac.bean.User;
 import dtx.rbac.controller.NodeController;
 import dtx.rbac.controller.RoleNodeController;
+import dtx.rbac.controller.impl.SessionRBACController;
+import dtx.rbac.util.MapUtil;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -39,29 +43,54 @@ public class GetNodesServlet1 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
+        User loginInfo=SessionRBACController.getLoginInfo(request);
+        if(!SessionRBACController.isLogin(request)){
+            response.getWriter().write("请先登录");
+            return;
+        }
         RoleNodeController rnc=ControllerFactory.getRoleNodeController();
         NodeController nc=ControllerFactory.getNodeController();
-        List<RoleNode> rnList=rnc.queryByRoleId(request.getParameter(roleId));
+        
+        Role role=ControllerFactory.getRoleController().getRoleById(request.getParameter(roleId));
+        
+        List<RoleNode> rnList=rnc.queryByRoleId(role.getUuid());
+        
+        List<Node> nodes=null;
+        if(ControllerFactory.getUserController().isAdmin(loginInfo)&&role!=null&&"".equals(role.getParentId())){
+            nodes=MapUtil.toList(nc.getAllNodes());
+        } else{
+            nodes=new ArrayList<>();
+            List<RoleNode> parentRNList=rnc.queryByRoleId(role.getParentId());
+            for(RoleNode rn:parentRNList){
+                nodes.add(nc.getNodeById(rn.getNodeId()));
+            }
+        }
+
         Map result=new LinkedHashMap();
-        while(!rnList.isEmpty()){
-            Iterator<RoleNode> iter=rnList.iterator();
+        while(!nodes.isEmpty()){
+            Iterator<Node> iter=nodes.iterator();
             Map childs=new LinkedHashMap();
             Node parent=null;
             String parentId=null;
             while(iter.hasNext()){
-                RoleNode rn=iter.next();
-                if(childs.isEmpty()||parentId.equals(nc.getParentId(rn.getNodeId()))){
+                Node node=iter.next();
+                if(childs.isEmpty()||parentId.equals(node.getParentId())){
                     Map valueMap=new HashMap();
-                    Node node=nc.getNodeById(rn.getNodeId());
                     valueMap.put("title", node.getTitle());
                     valueMap.put("parentId", node.getParentId());
+                    for(RoleNode roleNode:rnList){
+                        if(node.getUuid().equals(roleNode.getNodeId())){
+                            valueMap.put("selected", true);
+                            break;
+                        }
+                    }
                     valueMap.put("childs", new HashMap());
                     childs.put(node.getUuid(), valueMap);
-                    parentId=parentId==null ? nc.getParentId(rn.getNodeId()):parentId;
+                    parentId=parentId==null ? node.getParentId():parentId;
                     iter.remove();
                 }else{
-                    if(parentId.equals(rn.getNodeId())){
-                        parent=nc.getNodeById(rn.getNodeId());
+                    if(parentId.equals(node.getUuid())){
+                        parent=node;
                         iter.remove();
                     }
                 }
@@ -100,7 +129,7 @@ public class GetNodesServlet1 extends HttpServlet {
         else{
             Iterator iter=map.keySet().iterator();
             while(iter.hasNext()){
-                Map subMap=(Map) ((Map) map.get(iter.next())).get("childs");
+                Map subMap=(Map) ((Map)map.get(iter.next())).get("childs");
                 if(containUUID(subMap,uuid))
                     return true;
             }
@@ -116,7 +145,7 @@ public class GetNodesServlet1 extends HttpServlet {
         }
         Iterator iter=map.keySet().iterator();
         while(iter.hasNext()){
-            if(insertNode((Map) map.get(iter.next()), posUUID, keyUUID, valueMap))
+            if(insertNode((Map) ((Map) map.get(iter.next())).get("childs"), posUUID, keyUUID, valueMap))
                 return true;
         }
         return false;

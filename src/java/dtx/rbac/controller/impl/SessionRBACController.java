@@ -57,12 +57,11 @@ public class SessionRBACController {
         HttpSession session=request.getSession(false);
         if(session==null)return null;
         RBACController rbac=(RBACController) session.getAttribute(RBACNAME);
-        if(rbac==null)return null;/*
+        if(rbac==null)return null;
         if(ControllerFactory.getUserController().isAdmin(rbac.getLoginInfo()))
             return ControllerFactory.getRoleController().getAllChilds(DefaultRoleControllerImpl.ROOTROLEID);
         else
-            return rbac.getRoleChilds();*/
-        return ControllerFactory.getRoleController().getAllChilds(DefaultRoleControllerImpl.ROOTROLEID);
+            return rbac.getRoleChilds();
     }
     
     public static boolean accessDecision(Node node,HttpServletRequest request){
@@ -73,10 +72,10 @@ public class SessionRBACController {
     }
     
     public static boolean accessDecision(String nodeId,HttpServletRequest request){
-        /*HttpSession session=request.getSession(false);
+        HttpSession session=request.getSession(false);
         if(session==null)return false;
         RBACController rc=(RBACController) session.getAttribute(RBACNAME);
-        return rc!=null ? rc.accessDecision(nodeId):false;*/return true;
+        return rc!=null ? rc.accessDecision(nodeId):false;
     }
     
     public static void loginOut(HttpServletRequest request){
@@ -86,15 +85,6 @@ public class SessionRBACController {
         rc.loginOut();
         session.invalidate();
     }
-    
-    /*
-    public static List<Node> getAccessList(HttpServletRequest request){
-        HttpSession session=request.getSession(false);
-        if(session==null)return null;
-        RBACController rc=(RBACController) session.getAttribute(RBACNAME);
-        return rc!=null ? rc.getAccessList():null;
-    }
-    */
     
     public static Map getAccessList(HttpServletRequest request){
         HttpSession session=request.getSession(false);

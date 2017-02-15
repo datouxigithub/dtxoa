@@ -43,20 +43,6 @@ public class DefaultRBACControllerImpl implements RBACController {
         saveAccessList();
         return true;
     }
-
-    /*
-    @Override
-    public boolean accessDecision(String nodeId) {
-        if(!isLogin())return false;
-        if(userController.isAdmin(loginInfo))return true;
-        Iterator<Node> iter=accessList.iterator();
-        while(iter.hasNext()){
-            if(iter.next().getUuid().equals(nodeId))
-                return true;
-        }
-        return false;
-    }
-    */
     
     @Override
     public boolean accessDecision(String nodeId) {
@@ -76,13 +62,6 @@ public class DefaultRBACControllerImpl implements RBACController {
         return accessDecision(node.getUuid());
     }
 
-    /*
-    @Override
-    public List<Node> getAccessList() {
-        if(!isLogin())return null;
-        return accessList;
-    }
-    */
     public Map getAccessList(){
         if(!isLogin())return null;
         return accessMap;
@@ -92,37 +71,6 @@ public class DefaultRBACControllerImpl implements RBACController {
     public boolean isLogin() {
         return loginInfo!=null;
     }
-
-    
-    /*
-    @Override
-    public void saveAccessList() {
-        if(!isLogin())return;
-        if(userController.isAdmin(loginInfo))return;
-        accessMap=new LinkedHashMap();
-        List<Role> roles=new ArrayList<>();
-        Iterator<RoleUser> ruIter=roleUserController.queryByUserId(loginInfo.getUuid()).iterator();
-        while(ruIter.hasNext()){
-            roles.add(roleController.getRoleById(ruIter.next().getRoleId()));
-        }
-        for(Role role:roles){
-            Iterator<RoleNode> roleNodeIter=roleNodeController.queryByRoleId(role.getUuid()).iterator();
-            while(roleNodeIter.hasNext()){
-                RoleNode roleNode=roleNodeIter.next();
-                Node node=nodeController.getNodeById(roleNode.getNodeId());
-                if(accessList.contains(node)||(!node.getStatus())) {
-                    continue;
-                }
-                accessList.add(node);
-                List<Node> nodeList=nodeController.getAllChilds(node.getUuid());
-                for(Node n:nodeList){
-                    if(!n.getStatus())continue;
-                    accessList.add(n);
-                }
-            }
-        }
-    }
-    */
     
     @Override
     public void saveAccessList() {
@@ -134,7 +82,7 @@ public class DefaultRBACControllerImpl implements RBACController {
         Set<RoleNode> rnSet=new HashSet<>();
         while(ruIter.hasNext()){
             String roleId=ruIter.next().getRoleId();
-            roleChilds.putAll(roleController.getAllChilds(roleId));
+            roleChilds.putAll(roleController.getAllChilds(roleId,true));
             rnSet.addAll(roleNodeController.queryByRoleId(roleId));
         }
         while(!rnSet.isEmpty()){
@@ -189,7 +137,6 @@ public class DefaultRBACControllerImpl implements RBACController {
     @Override
     public void loginOut() {
         loginInfo=null;
-//        accessList=null;
         accessMap=null;
     }
 

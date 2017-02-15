@@ -180,39 +180,6 @@ public class DefaultNodeControllerImpl implements NodeController {
         return delete(node.getUuid());
     }
 
-    /*
-    @Override
-    public List<Node> getAllChilds(String parentId) {
-        List<Node> result=new ArrayList<>();
-        Iterator<Node> childs=getChilds(parentId).iterator();
-        while(childs.hasNext()){
-            Node node=childs.next();
-            result.add(node);
-            result.addAll(getAllChilds(node.getUuid()));
-        }
-        return result;
-    }
-
-    @Override
-    public List<Node> getAllNodes() {
-        Session session=HibernateUtil.getSession();
-        session.beginTransaction();
-        Query query=session.createQuery("FROM Node node WHERE node.parentId IS NULL");
-        @SuppressWarnings("unchecked")
-        List<Node> roots=query.list();
-        session.getTransaction().commit();
-
-        List<Node> result=new ArrayList<>();
-        Iterator<Node> iter=roots.iterator();
-        while(iter.hasNext()){
-            Node node=iter.next();
-            result.add(node);
-            result.addAll(getAllChilds(node.getUuid()));
-        }
-        return result;
-    }
-    */
-
     @Override
     public LinkedHashMap<Integer, String> getNodeTypes() {
         LinkedHashMap<Integer,String> nodeTypes=new LinkedHashMap();
@@ -220,19 +187,6 @@ public class DefaultNodeControllerImpl implements NodeController {
         nodeTypes.put(Node.NODETYPESIGLENODE, "独立节点");
         return nodeTypes;
     }
-    
-    /*
-    @Override
-    public LinkedHashMap getAllChildsByType(String parentId, int nodeType) {
-        LinkedHashMap result=new LinkedHashMap();
-        Iterator<Node> iter=getChildsByType(parentId, nodeType).iterator();
-        while(iter.hasNext()){
-            Node current=iter.next();
-            result.put(current, getAllChildsByType(current.getUuid(), nodeType));
-        }
-        return result;
-    }
-    */
     
     @Override
     public List<Node> getChildsByType(String parentId, int nodeType) {
@@ -281,6 +235,62 @@ public class DefaultNodeControllerImpl implements NodeController {
     public String getParentId(String nodeId) {
         Node node=getNodeById(nodeId);
         return node==null ? null:node.getParentId();
+    }
+
+    @Override
+    public List<Node> getChilds(String parentId, boolean status) {
+        Session session=HibernateUtil.getSession();
+        session.beginTransaction();
+        Query query=session.createQuery("FROM Node node WHERE node.parentId=:parent_id AND status=:status");
+        query.setString("parent_id", parentId);
+        query.setBoolean("status", status);
+        @SuppressWarnings("unchecked")
+        List<Node> result=query.list();
+        session.getTransaction().commit();
+        return result;
+    }
+
+    @Override
+    public List<Node> getChildsByType(String parentId, int nodeType, boolean status) {
+        List<Node> result=getChilds(parentId,status);
+        Iterator<Node> iter=result.iterator();
+        while(iter.hasNext()){
+            if(iter.next().getNodeType()!=nodeType)
+                iter.remove();
+        }
+        return result;
+    }
+
+    @Override
+    public Map getAllChilds(String parentId, boolean status) {
+        LinkedHashMap result=new LinkedHashMap();
+        Iterator<Node> iter=getChilds(parentId,status).iterator();
+        while(iter.hasNext()){
+            Node node= iter.next();
+            result.put(node, getAllChilds(node.getUuid()));
+        }
+        return result;
+    }
+
+    @Override
+    public Map getAllChildsByType(String parentId, int nodeType, boolean status) {
+        LinkedHashMap result=new LinkedHashMap();
+        Iterator<Node> iter=getChildsByType(parentId, nodeType, status).iterator();
+        while(iter.hasNext()){
+            Node node=iter.next();
+            result.put(node, getAllChildsByType(node.getUuid(), nodeType));
+        }
+        return result;
+    }
+
+    @Override
+    public Map getAllNodes(boolean status) {
+        return getAllChilds(ROOTNODEID, status);
+    }
+
+    @Override
+    public Map getAllNodesByType(int nodeType, boolean status) {
+        return getAllChildsByType(ROOTNODEID, nodeType, status);
     }
     
 }
