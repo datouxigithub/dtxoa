@@ -54,7 +54,6 @@ public class GetNodesServlet extends HttpServlet {
         Role role=ControllerFactory.getRoleController().getRoleById(request.getParameter(roleId));
         
         List<RoleNode> rnList=rnc.queryByRoleId(role.getUuid());
-//        List<RoleNode> parentRNList=rnc.queryByRoleId(role.getParentId());
         
         List<Node> nodes=null;
         if(ControllerFactory.getUserController().isAdmin(loginInfo)&&role!=null&&"".equals(role.getParentId())){
@@ -69,24 +68,17 @@ public class GetNodesServlet extends HttpServlet {
 
         Map result=new LinkedHashMap();
         while(!nodes.isEmpty()){
-//            Iterator<RoleNode> iter=parentRNList.iterator();
             Iterator<Node> iter=nodes.iterator();
             Map childs=new LinkedHashMap();
             Node parent=null;
             String parentId=null;
             while(iter.hasNext()){
-//                RoleNode rn=iter.next();
                 Node node=iter.next();
                 if(childs.isEmpty()||parentId.equals(node.getParentId())){
                     Map valueMap=new HashMap();
-//                    Node node=nc.getNodeById(rn.getNodeId());
                     valueMap.put("title", node.getTitle());
                     valueMap.put("parentId", node.getParentId());
                     for(RoleNode roleNode:rnList){
-                        /*if(rn.getNodeId().equals(roleNode.getNodeId())){
-                            valueMap.put("selected", true);
-                            break;
-                        }*/
                         if(node.getUuid().equals(roleNode.getNodeId())){
                             valueMap.put("selected", true);
                             break;
@@ -94,14 +86,9 @@ public class GetNodesServlet extends HttpServlet {
                     }
                     valueMap.put("childs", new HashMap());
                     childs.put(node.getUuid(), valueMap);
-//                    parentId=parentId==null ? nc.getParentId(rn.getNodeId()):parentId;
                     parentId=parentId==null ? node.getParentId():parentId;
                     iter.remove();
                 }else{
-                    /*if(parentId.equals(rn.getNodeId())){
-                        parent=nc.getNodeById(rn.getNodeId());
-                        iter.remove();
-                    }*/
                     if(parentId.equals(node.getUuid())){
                         parent=node;
                         iter.remove();
@@ -143,7 +130,6 @@ public class GetNodesServlet extends HttpServlet {
             Iterator iter=map.keySet().iterator();
             while(iter.hasNext()){
                 Map subMap=(Map) ((Map)map.get(iter.next())).get("childs");
-//                Map subMap=(Map)((Map)map.get(iter.next())).get("childs");
                 if(containUUID(subMap,uuid))
                     return true;
             }
