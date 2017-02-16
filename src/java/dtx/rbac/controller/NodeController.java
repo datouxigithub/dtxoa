@@ -16,7 +16,11 @@ public interface NodeController {
 	
 	public List<Node> getChilds(String parentId);
         
+        public List<Node> getChilds(String parentId,boolean status);
+        
         public List<Node> getChildsByType(String parentId,int nodeType);
+        
+        public List<Node> getChildsByType(String parentId,int nodeType,boolean status);
 	
 //	public List<Node> getAllChilds(String parentId);
 //        
@@ -24,12 +28,20 @@ public interface NodeController {
         
         public Map getAllChilds(String parentId);
         
+        public Map getAllChilds(String parentId,boolean status);
+        
         public Map getAllChildsByType(String parentId,int nodeType);
+        
+        public Map getAllChildsByType(String parentId,int nodeType,boolean status);
 	
 //	public List<Node> getAllNodes();
         public Map getAllNodes();
         
+        public Map getAllNodes(boolean status);
+        
         public Map getAllNodesByType(int nodeType);
+        
+        public Map getAllNodesByType(int nodeType,boolean status);
         
         public LinkedHashMap<Integer,String> getNodeTypes();
         

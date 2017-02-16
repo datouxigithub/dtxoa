@@ -12,14 +12,17 @@ public interface RoleController {
 	public List<Role> getByStatus(boolean status);
 	
 	public List<Role> getChilds(String parentId);
-	
-//      public List<Role> getAllChilds(String parentId);
-//	public List<Role> getAllRoles();
+        
+        public List<Role> getChilds(String parentId,boolean status);
         
         //Node:Map
 	public Map getAllChilds(String parentId);
 	
 	public Map getAllRoles();
+        
+        public Map getAllChilds(String parentid,boolean status);
+        
+        public Map getAllRoles(boolean status);
 	
 	//全面更新role
 	public boolean updateRole(Role role);
