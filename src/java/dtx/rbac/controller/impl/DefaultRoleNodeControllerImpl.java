@@ -1,13 +1,19 @@
 package dtx.rbac.controller.impl;
 
+import dtx.db.ControllerFactory;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import dtx.db.HibernateUtil;
+import dtx.rbac.bean.Node;
+import dtx.rbac.bean.Role;
 import dtx.rbac.bean.RoleNode;
+import dtx.rbac.controller.NodeController;
 import dtx.rbac.controller.RoleNodeController;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DefaultRoleNodeControllerImpl implements RoleNodeController {
 
@@ -109,5 +115,22 @@ public class DefaultRoleNodeControllerImpl implements RoleNodeController {
 	public boolean deleteByRoleId(RoleNode rn) {
 		return deleteByRoleId(rn.getRoleId());
 	}
+
+    @Override
+    public List<Node> getNodesByRole(String roleId) {
+        List<Node> nodes=new ArrayList<>();
+        NodeController nc=ControllerFactory.getNodeController();
+        Iterator<RoleNode> iter=queryByRoleId(roleId).iterator();
+        while(iter.hasNext()){
+            nodes.add(nc.getNodeById(((RoleNode)iter.next()).getNodeId()));
+        }
+        return nodes;
+    }
+
+    @Override
+    public List<Node> getNodesByRole(Role role) {
+        if(role==null)return new ArrayList<Node>();
+        return getNodesByRole(role.getUuid());
+    }
 
 }

@@ -1,5 +1,7 @@
 package dtx.rbac.controller;
 
+import dtx.rbac.bean.Node;
+import dtx.rbac.bean.Role;
 import java.util.List;
 
 import dtx.rbac.bean.RoleNode;
@@ -9,6 +11,10 @@ public interface RoleNodeController {
     public List<RoleNode> queryByNodeId(String nodeId);
 
     public List<RoleNode> queryByRoleId(String roleId);
+    
+    public List<Node> getNodesByRole(String roleId);
+    
+    public List<Node> getNodesByRole(Role role);
 
     public RoleNode queryById(String id);
 
