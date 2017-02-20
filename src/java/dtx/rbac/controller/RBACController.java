@@ -16,7 +16,6 @@ public interface RBACController {
 	public boolean accessDecision(Node node);
 	
 	//根据登录信息返回权限列表
-//	public List<Node> getAccessList();
 	public Map getAccessList();
         
 	//检查是否已经登录

@@ -6,7 +6,10 @@
 package dtx.rbac.bean;
 
 import dtx.db.ControllerFactory;
+import dtx.rbac.controller.NodeController;
+import dtx.rbac.controller.RBACController;
 import dtx.rbac.controller.RoleNodeController;
+import dtx.rbac.controller.impl.DefaultNodeControllerImpl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,21 +21,67 @@ import java.util.List;
 public class NodeTree {
     private List<NodeTreeLeaf> rootLeaves=new ArrayList<>();
     private int treeDepth=Integer.MIN_VALUE;
+    private RBACController rbac;
     
-    public NodeTree(List<Role> roles){
+    private NodeTree(RBACController rbac){
+        this.rbac=rbac;
+    }
+    
+    public NodeTree(List<Role> roles,RBACController rbac){
+        this(rbac);
         init(roles);
     }
     
-    public NodeTree(List<Role> roles,boolean status){
+    public NodeTree(List<Role> roles,boolean status,RBACController rbac){
+        this(rbac);
         init(roles, status);
     }
     
-    public NodeTree(Node[] nodes){
+    public NodeTree(Node[] nodes,RBACController rbac){
+        this(rbac);
         init(nodes);
     }
     
-    public NodeTree(Node[] nodes,boolean status){
+    public NodeTree(Node[] nodes,boolean status,RBACController rbac){
+        this(rbac);
         init(nodes, status);
+    }
+    
+    private void init(RBACController rbac){
+        if(!rbac.isLogin())return;
+        NodeController nc=ControllerFactory.getNodeController();
+        if(ControllerFactory.getUserController().isAdmin(rbac.getLoginInfo())){
+            Iterator<Node> iter=nc.getChilds(DefaultNodeControllerImpl.ROOTNODEID).iterator();
+            while(iter.hasNext()){
+                rootLeaves.add(new NodeTreeLeaf((Node)iter.next()));
+            }
+        }else{
+            List<Role> roles=ControllerFactory.getRoleUserController().getRoleByUser(rbac.getLoginInfo());
+            RoleNodeController rnc=ControllerFactory.getRoleNodeController();
+            List<RoleNode> rns=new ArrayList<>();
+            for(Role role:roles){
+                List<Node> nodes=rnc.getNodesByRole(role);
+                for(Node node:nodes){
+                    rootLeaves.add(new NodeTreeLeaf(node));
+                }
+                rns.addAll(rnc.queryByRoleId(role.getUuid()));
+            }
+            List<NodeTreeLeaf> leafList=toList();
+            for(NodeTreeLeaf leaf:leafList){
+                String nodeId=null;
+                Iterator<RoleNode> rnIter=rns.iterator();
+                while(rnIter.hasNext()){
+                    RoleNode rn=rnIter.next();
+                    if(rn.getNodeId().equals(leaf.getEntity().getUuid())){
+                        nodeId=rn.getNodeId();
+                        break;
+                    }
+                }
+                if(nodeId!=null)
+                    delete(nodeId);
+            }
+        }
+        checkRepeat();
     }
     
     private void init(List<Role> roles){
@@ -113,6 +162,18 @@ public class NodeTree {
         return find(nodeId, rootLeaves);
     }
     
+    private boolean delete(String nodeId,List<NodeTreeLeaf> leaves){
+        for(NodeTreeLeaf leaf:leaves){
+            if(leaf.getEntity().getUuid().equals(nodeId))return true;
+            if(delete(nodeId,leaf.getLeaves()))return true;
+        }
+        return false;
+    }
+    
+    private void delete(String nodeId){
+        delete(nodeId, rootLeaves);
+    }
+    
     public List<NodeTreeLeaf> getRoots(){
         return rootLeaves;
     }
@@ -138,5 +199,18 @@ public class NodeTree {
         }
         treeDepth=maxDepth!=0 ? maxDepth:treeDepth;
         return maxDepth;
+    }
+    
+    private List<NodeTreeLeaf> toList(List<NodeTreeLeaf> leaves){
+        List<NodeTreeLeaf> leafList=new ArrayList<>();
+        for(NodeTreeLeaf leaf:leaves){
+            leafList.add(leaf);
+            leafList.addAll(leaf.getLeaves());
+        }
+        return leafList;
+    }
+    
+    public List<NodeTreeLeaf> toList(){
+        return toList(rootLeaves);
     }
 }

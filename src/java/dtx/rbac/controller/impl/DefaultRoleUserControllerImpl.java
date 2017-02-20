@@ -1,13 +1,18 @@
 package dtx.rbac.controller.impl;
 
+import dtx.db.ControllerFactory;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import dtx.db.HibernateUtil;
+import dtx.rbac.bean.Role;
 import dtx.rbac.bean.RoleUser;
+import dtx.rbac.bean.User;
+import dtx.rbac.controller.RoleController;
 import dtx.rbac.controller.RoleUserController;
+import java.util.ArrayList;
 
 public class DefaultRoleUserControllerImpl implements RoleUserController {
 
@@ -113,6 +118,21 @@ public class DefaultRoleUserControllerImpl implements RoleUserController {
     public void addRoleUsers(String user_id, String[] roles) {
         for(String role:roles)
             if(addRoleUser(user_id, role)==null)return;
+    }
+
+    @Override
+    public List<Role> getRoleByUser(User user) {
+        List<Role> result=new ArrayList<>();
+        if(ControllerFactory.getUserController().isAdmin(user)){
+            result=ControllerFactory.getRoleController().getChilds(DefaultRoleControllerImpl.ROOTROLEID);
+        }else{
+            List<RoleUser> rus=queryByUserId(user.getUuid());
+            RoleController rc=ControllerFactory.getRoleController();
+            for(RoleUser ru:rus){
+                result.add(rc.getRoleById(ru.getRoleId()));
+            }
+        }
+        return result;
     }
 
 }

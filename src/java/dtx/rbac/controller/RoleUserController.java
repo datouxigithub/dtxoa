@@ -1,14 +1,18 @@
 package dtx.rbac.controller;
 
+import dtx.rbac.bean.Role;
 import java.util.List;
 
 import dtx.rbac.bean.RoleUser;
+import dtx.rbac.bean.User;
 
 public interface RoleUserController {
 
     public List<RoleUser> queryByUserId(String userId);
 
     public List<RoleUser> queryByRoleId(String roleId);
+    
+    public List<Role> getRoleByUser(User user);
 
     public RoleUser queryById(String id);
 
