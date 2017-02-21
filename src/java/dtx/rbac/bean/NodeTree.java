@@ -26,23 +26,23 @@ public class NodeTree {
         init(rbac);
     }
     
+    public NodeTree(RBACController rbac,boolean status){
+        init(rbac, status);
+    }
+    
     public NodeTree(List<Role> roles,RBACController rbac){
-        this(rbac);
         init(roles);
     }
     
     public NodeTree(List<Role> roles,boolean status,RBACController rbac){
-        this(rbac);
         init(roles, status);
     }
     
     public NodeTree(Node[] nodes,RBACController rbac){
-        this(rbac);
         init(nodes);
     }
     
     public NodeTree(Node[] nodes,boolean status,RBACController rbac){
-        this(rbac);
         init(nodes, status);
     }
     
@@ -62,6 +62,22 @@ public class NodeTree {
             for(Role role:roles){
                 if(!role.status)continue;
                 rns.addAll(rnc.queryByRoleId(role.getUuid()));
+            }
+            List<NodeTreeLeaf> leaves=toList();
+            for(NodeTreeLeaf leaf:leaves){
+                boolean exists=false;
+                Iterator<RoleNode> rnIter=rns.iterator();
+                while(rnIter.hasNext()){
+                    Node node=nc.getNodeById(((RoleNode)rnIter.next()).getNodeId());
+                    if(node.getStatus()!=status)
+                        continue;
+                    if(node.equals(leaf.getEntity())){
+                        exists=true;
+                        break;
+                    }
+                }
+                if(!exists)
+                    delete(leaf.getEntity().getUuid(), rootLeaves);
             }
         }
     }
@@ -84,17 +100,17 @@ public class NodeTree {
             }
             List<NodeTreeLeaf> leafList=toList();
             for(NodeTreeLeaf leaf:leafList){
-                String nodeId=null;
+                boolean exists=false;
                 Iterator<RoleNode> rnIter=rns.iterator();
                 while(rnIter.hasNext()){
                     RoleNode rn=rnIter.next();
                     if(rn.getNodeId().equals(leaf.getEntity().getUuid())){
-                        nodeId=rn.getNodeId();
+                        exists=true;
                         break;
                     }
                 }
-                if(nodeId!=null)
-                    delete(nodeId,rootLeaves);
+                if(!exists)
+                    delete(leaf.getEntity().getUuid(),rootLeaves);
             }
         }
         checkRepeat();
