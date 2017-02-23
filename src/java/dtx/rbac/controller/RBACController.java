@@ -1,9 +1,10 @@
 package dtx.rbac.controller;
 
 import dtx.rbac.bean.Node;
+import dtx.rbac.bean.NodeTree;
+import dtx.rbac.bean.RoleTree;
 import dtx.rbac.bean.User;
 import java.sql.Timestamp;
-import java.util.Map;
 
 public interface RBACController {
 
@@ -16,7 +17,7 @@ public interface RBACController {
 	public boolean accessDecision(Node node);
 	
 	//根据登录信息返回权限列表
-	public Map getAccessList();
+	public NodeTree getAccessList();
         
 	//检查是否已经登录
 	public boolean isLogin();
@@ -30,5 +31,5 @@ public interface RBACController {
         
         public void updateLoginInfo(Timestamp loginTime,String loginIP);
         
-        public Map getRoleChilds();
+        public RoleTree getRoleChilds();
 }

@@ -7,11 +7,12 @@ package dtx.rbac.controller.impl;
 
 import dtx.db.ControllerFactory;
 import dtx.rbac.bean.Node;
+import dtx.rbac.bean.NodeTree;
+import dtx.rbac.bean.RoleTree;
 import dtx.rbac.bean.User;
 import dtx.rbac.controller.RBACController;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -53,15 +54,11 @@ public class SessionRBACController {
         return rc!=null ? rc.isLogin():false;
     }
     
-    public static Map getRoleChilds(HttpServletRequest request){
+    public static RoleTree getRoleChilds(HttpServletRequest request){
         HttpSession session=request.getSession(false);
         if(session==null)return null;
         RBACController rbac=(RBACController) session.getAttribute(RBACNAME);
-        if(rbac==null)return null;
-        if(ControllerFactory.getUserController().isAdmin(rbac.getLoginInfo()))
-            return ControllerFactory.getRoleController().getAllChilds(DefaultRoleControllerImpl.ROOTROLEID);
-        else
-            return rbac.getRoleChilds();
+        return rbac==null ? null:rbac.getRoleChilds();
     }
     
     public static boolean accessDecision(Node node,HttpServletRequest request){
@@ -86,7 +83,7 @@ public class SessionRBACController {
         session.invalidate();
     }
     
-    public static Map getAccessList(HttpServletRequest request){
+    public static NodeTree getAccessList(HttpServletRequest request){
         HttpSession session=request.getSession(false);
         if(session==null)return null;
         RBACController rc=(RBACController) session.getAttribute(RBACNAME);

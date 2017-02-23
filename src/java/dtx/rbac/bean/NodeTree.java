@@ -80,6 +80,7 @@ public class NodeTree {
                     delete(leaf.getEntity().getUuid(), rootLeaves);
             }
         }
+        checkRepeat();
     }
     
     private void init(RBACController rbac){
