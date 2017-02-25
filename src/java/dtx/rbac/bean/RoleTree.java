@@ -159,7 +159,7 @@ public class RoleTree {
         List<RoleTreeLeaf> leafList=new ArrayList<>();
         for(RoleTreeLeaf leaf:leaves){
             leafList.add(leaf);
-            leafList.addAll(leaf.getLeaves());
+            leafList.addAll(toList(leaf.getLeaves()));
         }
         return leafList;
     }
