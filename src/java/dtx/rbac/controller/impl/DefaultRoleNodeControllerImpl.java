@@ -133,4 +133,18 @@ public class DefaultRoleNodeControllerImpl implements RoleNodeController {
         return getNodesByRole(role.getUuid());
     }
 
+    @Override
+    public List<Node> getNodesByRole(List<Role> roles) {
+        List<Node> nodes=new ArrayList<>();
+        for(Role role:roles){
+            Iterator<Node> nodeIter=getNodesByRole(role).iterator();
+            while(nodeIter.hasNext()){
+                Node current=nodeIter.next();
+                if(!nodes.contains(current))
+                    nodes.add(current);
+            }
+        }
+        return nodes;
+    }
+
 }

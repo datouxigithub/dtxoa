@@ -13,6 +13,8 @@ import dtx.rbac.controller.impl.DefaultNodeControllerImpl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  *
@@ -22,7 +24,7 @@ public class NodeTree {
     private List<NodeTreeLeaf> rootLeaves=new ArrayList<>();
     private int treeDepth=Integer.MIN_VALUE;
     
-    private NodeTree(RBACController rbac){
+    public NodeTree(RBACController rbac){
         init(rbac);
     }
     
@@ -30,20 +32,28 @@ public class NodeTree {
         init(rbac, status);
     }
     
-    public NodeTree(List<Role> roles,RBACController rbac){
+    public NodeTree(List<Role> roles){
         init(roles);
     }
     
-    public NodeTree(List<Role> roles,boolean status,RBACController rbac){
+    public NodeTree(List<Role> roles,boolean status){
         init(roles, status);
     }
     
-    public NodeTree(Node[] nodes,RBACController rbac){
+    public NodeTree(Node[] nodes){
         init(nodes);
     }
     
-    public NodeTree(Node[] nodes,boolean status,RBACController rbac){
+    public NodeTree(Node[] nodes,int nodeType){
+        init(nodes, nodeType);
+    }
+    
+    public NodeTree(Node[] nodes,boolean status){
         init(nodes, status);
+    }
+    
+    public NodeTree(Node[] nodes,boolean status,int nodeType){
+        init(nodes, status, nodeType);
     }
     
     private void init(RBACController rbac,boolean status){
@@ -54,33 +64,11 @@ public class NodeTree {
             while(iter.hasNext()){
                 rootLeaves.add(new NodeTreeLeaf((Node)iter.next()));
             }
+            checkRepeat();
         }else{
-            List<Role> roles=ControllerFactory.getRoleUserController().getRoleByUser(rbac.getLoginInfo());
-            RoleNodeController rnc=ControllerFactory.getRoleNodeController();
-            init(roles, status);
-            List<RoleNode> rns=new ArrayList<>();
-            for(Role role:roles){
-                if(!role.status)continue;
-                rns.addAll(rnc.queryByRoleId(role.getUuid()));
-            }
-            List<NodeTreeLeaf> leaves=toList();
-            for(NodeTreeLeaf leaf:leaves){
-                boolean exists=false;
-                Iterator<RoleNode> rnIter=rns.iterator();
-                while(rnIter.hasNext()){
-                    Node node=nc.getNodeById(((RoleNode)rnIter.next()).getNodeId());
-                    if(node.getStatus()!=status)
-                        continue;
-                    if(node.equals(leaf.getEntity())){
-                        exists=true;
-                        break;
-                    }
-                }
-                if(!exists)
-                    delete(leaf.getEntity().getUuid(), rootLeaves);
-            }
+            init(ControllerFactory.getRoleUserController().getRoleByUser(rbac.getLoginInfo()),status);
         }
-        checkRepeat();
+        
     }
     
     private void init(RBACController rbac){
@@ -91,30 +79,10 @@ public class NodeTree {
             while(iter.hasNext()){
                 rootLeaves.add(new NodeTreeLeaf((Node)iter.next()));
             }
+            checkRepeat();
         }else{
-            List<Role> roles=ControllerFactory.getRoleUserController().getRoleByUser(rbac.getLoginInfo());
-            RoleNodeController rnc=ControllerFactory.getRoleNodeController();
-            init(roles);
-            List<RoleNode> rns=new ArrayList<>();
-            for(Role role:roles){
-                rns.addAll(rnc.queryByRoleId(role.getUuid()));
-            }
-            List<NodeTreeLeaf> leafList=toList();
-            for(NodeTreeLeaf leaf:leafList){
-                boolean exists=false;
-                Iterator<RoleNode> rnIter=rns.iterator();
-                while(rnIter.hasNext()){
-                    RoleNode rn=rnIter.next();
-                    if(rn.getNodeId().equals(leaf.getEntity().getUuid())){
-                        exists=true;
-                        break;
-                    }
-                }
-                if(!exists)
-                    delete(leaf.getEntity().getUuid(),rootLeaves);
-            }
+            init(ControllerFactory.getRoleUserController().getRoleByUser(rbac.getLoginInfo()));
         }
-        checkRepeat();
     }
     
     private void init(List<Role> roles){
@@ -124,6 +92,20 @@ public class NodeTree {
             nodes.addAll(rnc.getNodesByRole(role));
         }
         init(nodes.toArray(new Node[nodes.size()]));
+        List<NodeTreeLeaf> forDelete=new ArrayList<>();
+        for(NodeTreeLeaf leaf:toList()){
+            boolean exists=false;
+            for(Node node:nodes){
+                if(node.equals(leaf.getEntity())){
+                    exists=true;
+                    break;
+                }
+            }
+            if(!exists)
+                forDelete.add(leaf);
+        }
+        for(NodeTreeLeaf leaf:forDelete)
+            delete(leaf.getEntity().getUuid(), rootLeaves);
     }
     
     private void init(List<Role> roles,boolean status){
@@ -134,6 +116,22 @@ public class NodeTree {
             nodes.addAll(rnc.getNodesByRole(role));
         }
         init(nodes.toArray(new Node[nodes.size()]), status);
+        List<NodeTreeLeaf> forDelete=new ArrayList<>();
+        for(NodeTreeLeaf leaf:toList()){
+            boolean exists=false;
+            for(Node node:nodes){
+                if(node.getStatus()!=status)
+                    continue;
+                if(node.equals(leaf.getEntity())){
+                    exists=true;
+                    break;
+                }
+            }
+            if(!exists)
+                forDelete.add(leaf);
+        }
+        for(NodeTreeLeaf leaf:forDelete)
+            delete(leaf.getEntity().getUuid(), rootLeaves);
     }
     
     private void init(Node[] nodes){
@@ -143,12 +141,30 @@ public class NodeTree {
         }
         checkRepeat();
     }
+
+    private void init(Node[] nodes,int nodeType){
+        rootLeaves=new ArrayList<>();
+        for(Node node:nodes){
+            if(node.getNodeType()!=nodeType)continue;
+            rootLeaves.add(new NodeTreeLeaf(node, nodeType));
+        }
+        checkRepeat();
+    }
     
     private void init(Node[] nodes,boolean status){
         rootLeaves=new ArrayList<>();
         for(Node node:nodes){
             if(node.getStatus()!=status)continue;
             rootLeaves.add(new NodeTreeLeaf(node,status));
+        }
+        checkRepeat();
+    }
+    
+    private void init(Node[] nodes,boolean status,int nodeType){
+        rootLeaves=new ArrayList<>();
+        for(Node node:nodes){
+            if(node.getStatus()!=status||node.getNodeType()!=nodeType)continue;
+            rootLeaves.add(new NodeTreeLeaf(node, status, nodeType));
         }
         checkRepeat();
     }
@@ -171,7 +187,7 @@ public class NodeTree {
         Iterator<NodeTreeLeaf> leafIter=leaves.iterator();
         while(leafIter.hasNext()){
             NodeTreeLeaf leaf=leafIter.next();
-            if(targetLeaf.equals(leaf)||isExists(targetLeaf, leaf.getLeaves()))return true;
+            if(targetLeaf.getEntity().equals(leaf.getEntity())||isExists(targetLeaf, leaf.getLeaves()))return true;
         }
         return false;
     }
@@ -198,8 +214,10 @@ public class NodeTree {
     
     private boolean delete(String nodeId,List<NodeTreeLeaf> leaves){
         for(NodeTreeLeaf leaf:leaves){
-            if(leaf.getEntity().getUuid().equals(nodeId))
+            if(leaf.getEntity().getUuid().equals(nodeId)){
+                leaves.remove(leaf);
                 return true;
+            }
             if(delete(nodeId,leaf.getLeaves()))
                 return true;
         }
@@ -237,12 +255,24 @@ public class NodeTree {
         List<NodeTreeLeaf> leafList=new ArrayList<>();
         for(NodeTreeLeaf leaf:leaves){
             leafList.add(leaf);
-            leafList.addAll(leaf.getLeaves());
+            leafList.addAll(toList(leaf.getLeaves()));
         }
         return leafList;
     }
     
     public List<NodeTreeLeaf> toList(){
         return toList(rootLeaves);
+    }
+    
+    public JSONArray toJSON(){
+        JSONArray arr=new JSONArray();
+        for(NodeTreeLeaf leaf:rootLeaves){
+            try {
+                arr.put(leaf.toJSON());
+            } catch (JSONException ex) {
+                continue;
+            }
+        }
+        return arr;
     }
 }

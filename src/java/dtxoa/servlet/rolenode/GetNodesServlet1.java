@@ -57,12 +57,14 @@ public class GetNodesServlet1 extends HttpServlet {
         
         List<Node> nodes=null;
         if(ControllerFactory.getUserController().isAdmin(loginInfo)&&role!=null&&"".equals(role.getParentId())){
-            nodes=MapUtil.toList(nc.getAllNodes());
+            nodes=MapUtil.toList(nc.getAllNodes(true));
         } else{
             nodes=new ArrayList<>();
             List<RoleNode> parentRNList=rnc.queryByRoleId(role.getParentId());
             for(RoleNode rn:parentRNList){
-                nodes.add(nc.getNodeById(rn.getNodeId()));
+                Node node=nc.getNodeById(rn.getNodeId());
+                if(node.getStatus())
+                    nodes.add(node);
             }
         }
 

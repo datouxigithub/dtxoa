@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import dtx.db.ControllerFactory;
 import dtx.db.HibernateUtil;
 import dtx.rbac.bean.Node;
+import dtx.rbac.bean.NodeTree;
 import dtx.rbac.controller.NodeController;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -200,34 +201,24 @@ public class DefaultNodeControllerImpl implements NodeController {
     }
 
     @Override
-    public Map getAllChilds(String parentId) {
-        LinkedHashMap result=new LinkedHashMap();
-        Iterator<Node> iter=getChilds(parentId).iterator();
-        while(iter.hasNext()){
-            Node node= iter.next();
-            result.put(node, getAllChilds(node.getUuid()));
-        }
-        return result;
+    public NodeTree getAllChilds(String parentId) {
+        List<Node> childs=getChilds(parentId);
+        return new NodeTree(childs.toArray(new Node[childs.size()]));
     }
 
     @Override
-    public Map getAllChildsByType(String parentId, int nodeType) {
-        LinkedHashMap result=new LinkedHashMap();
-        Iterator<Node> iter=getChildsByType(parentId, nodeType).iterator();
-        while(iter.hasNext()){
-            Node node=iter.next();
-            result.put(node, getAllChildsByType(node.getUuid(), nodeType));
-        }
-        return result;
+    public NodeTree getAllChildsByType(String parentId, int nodeType) {
+        List<Node> nodes=getChildsByType(parentId, nodeType);
+        return new NodeTree(nodes.toArray(new Node[nodes.size()]), nodeType);
     }
 
     @Override
-    public Map getAllNodes() {
+    public NodeTree getAllNodes() {
         return getAllChilds(ROOTNODEID);
     }
 
     @Override
-    public Map getAllNodesByType(int nodeType) {
+    public NodeTree getAllNodesByType(int nodeType) {
         return getAllChildsByType(ROOTNODEID, nodeType);
     }
 
@@ -262,34 +253,24 @@ public class DefaultNodeControllerImpl implements NodeController {
     }
 
     @Override
-    public Map getAllChilds(String parentId, boolean status) {
-        LinkedHashMap result=new LinkedHashMap();
-        Iterator<Node> iter=getChilds(parentId,status).iterator();
-        while(iter.hasNext()){
-            Node node= iter.next();
-            result.put(node, getAllChilds(node.getUuid()));
-        }
-        return result;
+    public NodeTree getAllChilds(String parentId, boolean status) {
+        List<Node> nodes=getChilds(parentId, status);
+        return new NodeTree(nodes.toArray(new Node[nodes.size()]), status);
     }
 
     @Override
-    public Map getAllChildsByType(String parentId, int nodeType, boolean status) {
-        LinkedHashMap result=new LinkedHashMap();
-        Iterator<Node> iter=getChildsByType(parentId, nodeType, status).iterator();
-        while(iter.hasNext()){
-            Node node=iter.next();
-            result.put(node, getAllChildsByType(node.getUuid(), nodeType));
-        }
-        return result;
+    public NodeTree getAllChildsByType(String parentId, int nodeType, boolean status) {
+        List<Node> nodes=getChildsByType(parentId, nodeType, status);
+        return new NodeTree(nodes.toArray(new Node[nodes.size()]), status, nodeType);
     }
 
     @Override
-    public Map getAllNodes(boolean status) {
+    public NodeTree getAllNodes(boolean status) {
         return getAllChilds(ROOTNODEID, status);
     }
 
     @Override
-    public Map getAllNodesByType(int nodeType, boolean status) {
+    public NodeTree getAllNodesByType(int nodeType, boolean status) {
         return getAllChildsByType(ROOTNODEID, nodeType, status);
     }
     
