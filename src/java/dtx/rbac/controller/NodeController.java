@@ -3,6 +3,7 @@ package dtx.rbac.controller;
 import java.util.List;
 
 import dtx.rbac.bean.Node;
+import dtx.rbac.bean.NodeTree;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -26,22 +27,22 @@ public interface NodeController {
 //        
 //        public LinkedHashMap getAllChildsByType(String parentId,int nodeType);
         
-        public Map getAllChilds(String parentId);
+        public NodeTree getAllChilds(String parentId);
         
-        public Map getAllChilds(String parentId,boolean status);
+        public NodeTree getAllChilds(String parentId,boolean status);
         
-        public Map getAllChildsByType(String parentId,int nodeType);
+        public NodeTree getAllChildsByType(String parentId,int nodeType);
         
-        public Map getAllChildsByType(String parentId,int nodeType,boolean status);
+        public NodeTree getAllChildsByType(String parentId,int nodeType,boolean status);
 	
 //	public List<Node> getAllNodes();
-        public Map getAllNodes();
+        public NodeTree getAllNodes();
         
-        public Map getAllNodes(boolean status);
+        public NodeTree getAllNodes(boolean status);
         
-        public Map getAllNodesByType(int nodeType);
+        public NodeTree getAllNodesByType(int nodeType);
         
-        public Map getAllNodesByType(int nodeType,boolean status);
+        public NodeTree getAllNodesByType(int nodeType,boolean status);
         
         public LinkedHashMap<Integer,String> getNodeTypes();
         

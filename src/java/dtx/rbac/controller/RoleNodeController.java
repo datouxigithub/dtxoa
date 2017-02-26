@@ -15,6 +15,8 @@ public interface RoleNodeController {
     public List<Node> getNodesByRole(String roleId);
     
     public List<Node> getNodesByRole(Role role);
+    
+    public List<Node> getNodesByRole(List<Role> roles);
 
     public RoleNode queryById(String id);
 
