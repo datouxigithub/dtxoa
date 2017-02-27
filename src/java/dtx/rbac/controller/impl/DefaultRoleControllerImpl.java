@@ -1,6 +1,5 @@
 package dtx.rbac.controller.impl;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -10,9 +9,8 @@ import org.hibernate.Session;
 import dtx.db.ControllerFactory;
 import dtx.db.HibernateUtil;
 import dtx.rbac.bean.Role;
+import dtx.rbac.bean.RoleTree;
 import dtx.rbac.controller.RoleController;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class DefaultRoleControllerImpl implements RoleController {
 
@@ -142,36 +140,22 @@ public class DefaultRoleControllerImpl implements RoleController {
     }
         
     @Override
-    public Map getAllChilds(String parentId){
-        LinkedHashMap result=new LinkedHashMap();
-
-        Iterator<Role> childs=getChilds(parentId).iterator();
-        while(childs.hasNext()){
-            Role role=childs.next();
-            result.put(role, getAllChilds(role.getUuid()));
-        }
-
-        return result;
+    public RoleTree getAllChilds(String parentId){
+        return new RoleTree(getChilds(parentId));
     }
 
     @Override
-    public Map getAllRoles() {
+    public RoleTree getAllRoles() {
         return getAllChilds(ROOTROLEID);
     }
 
     @Override
-    public Map getAllChilds(String parentid, boolean status) {
-        LinkedHashMap result=new LinkedHashMap();
-        Iterator<Role> childs=getChilds(parentid, status).iterator();
-        while(childs.hasNext()){
-            Role role=childs.next();
-            result.put(role, getAllChilds(role.getUuid(), status));
-        }
-        return result;
+    public RoleTree getAllChilds(String parentid, boolean status) {
+        return new RoleTree(getChilds(parentid, status), status);
     }
 
     @Override
-    public Map getAllRoles(boolean status) {
+    public RoleTree getAllRoles(boolean status) {
         return getAllChilds(ROOTROLEID, status);
     }
 }

@@ -6,9 +6,8 @@
 package dtxoa.servlet.validate;
 
 import dtx.db.ControllerFactory;
-import dtx.rbac.bean.Role;
+import dtx.rbac.bean.RoleTreeLeaf;
 import dtx.rbac.controller.RoleController;
-import dtx.rbac.util.MapUtil;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,9 +34,9 @@ public class RoleNameExistsValidateServlet extends HttpServlet {
         }else{
             roleName=roleName.trim();
             RoleController rc=ControllerFactory.getRoleController();
-            List<Role> roleList=MapUtil.toList(rc.getAllRoles());
-            for(Role role:roleList){
-                if(roleName.equals(role.getRoleName())){
+            List<RoleTreeLeaf> roleList=rc.getAllRoles().toList();
+            for(RoleTreeLeaf leaf:roleList){
+                if(roleName.equals(leaf.getEntity().getRoleName())){
                     result=true;
                     break;
                 }

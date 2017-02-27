@@ -3,6 +3,7 @@ package dtx.rbac.controller;
 import java.util.List;
 
 import dtx.rbac.bean.Role;
+import dtx.rbac.bean.RoleTree;
 import java.util.Map;
 
 public interface RoleController {
@@ -16,13 +17,13 @@ public interface RoleController {
         public List<Role> getChilds(String parentId,boolean status);
         
         //Node:Map
-	public Map getAllChilds(String parentId);
+	public RoleTree getAllChilds(String parentId);
 	
-	public Map getAllRoles();
+	public RoleTree getAllRoles();
         
-        public Map getAllChilds(String parentid,boolean status);
+        public RoleTree getAllChilds(String parentid,boolean status);
         
-        public Map getAllRoles(boolean status);
+        public RoleTree getAllRoles(boolean status);
 	
 	//全面更新role
 	public boolean updateRole(Role role);

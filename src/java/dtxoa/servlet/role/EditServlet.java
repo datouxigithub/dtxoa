@@ -7,12 +7,13 @@ package dtxoa.servlet.role;
 
 import dtx.db.ControllerFactory;
 import dtx.rbac.bean.Role;
+import dtx.rbac.bean.RoleTree;
+import dtx.rbac.bean.RoleTreeLeaf;
 import dtx.rbac.controller.impl.DefaultRoleControllerImpl;
 import dtx.rbac.controller.impl.SessionRBACController;
-import dtx.rbac.util.MapUtil;
 import dtxoa.servlet.JumpServlet;
 import dtxoa.servlet.ValidateServlet;
-import java.util.Map;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.velocity.Template;
@@ -36,11 +37,24 @@ public class EditServlet extends ValidateServlet {
             SessionRBACController.jump(request, response);
         }
         context.put("action", SessionRBACController.getPageAddress("/role/save-edit?"+ROLEID+"="+role.getUuid(), request));
-        Map parents=rc.getAllRoles();
-        MapUtil.removeObject(parents, role);
-        context.put("parents", parents);
+        RoleTree roleTree=rc.getAllRoles();
+        delete(role, roleTree.getRoots());
+        context.put("parents", roleTree);
         context.put("editRole", role);
         return getTemplate("role.html");
+    }
+    
+    private boolean delete(Role role,List<RoleTreeLeaf> leaves){
+        for(RoleTreeLeaf leaf:leaves){
+            if(leaf.getEntity().equals(role)){
+                leaves.remove(leaf);
+                return true;
+            }else{
+                if(delete(role, leaf.getLeaves()))
+                    return true;
+            }
+        }
+        return false;
     }
 
 }
