@@ -606,12 +606,12 @@
                                         <select name="roles" class="form-control chzn-select" multiple="">
                                             #set($level=0)
                                             #macro(iter_parent $parents)
-                                                #foreach($pn in $parents.entrySet())
+                                                #foreach($pn in $parents)
                                                     #set($padding=$level*5)
-                                                    <option value="${pn.key.getUuid()}" data-parent="${pn.key.getParentId()}" style="padding-left: ${padding}px" #is_role($pn.key.getUuid())>${pn.key.getRoleName()}</option>
-                                                    #if($pn.value.entrySet().size()>0)
+                                                    <option value="${pn.getEntity().getUuid()}" data-parent="${pn.getEntity().getParentId()}" style="padding-left: ${padding}px" #is_role($pn.getEntity().getUuid())>${pn.getEntity().getRoleName()}</option>
+                                                    #if($pn.getLeaves().size()>0)
                                                         #set($level=$level+1)
-                                                        #iter_parent($pn.value)
+                                                        #iter_parent($pn.getLeaves())
                                                         #set($level=$level - 1)
                                                     #end
                                                 #end
@@ -623,7 +623,7 @@
                                                     #end
                                                 #end
                                             #end
-                                            #iter_parent($roles)
+                                            #iter_parent($roles.getRoots())
                                         </select>
                                     </div>
                                 </div>

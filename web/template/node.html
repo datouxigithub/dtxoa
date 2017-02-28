@@ -612,17 +612,17 @@
                                             <option value="">根节点</option>
                                             #set($level=0)
                                             #macro(iter_parent $parents)
-                                                #foreach($pn in $parents.entrySet())
+                                                #foreach($pn in $parents)
                                                     #set($padding=$level*5)
-                                                    <option value="${pn.key.getUuid()}" style="padding-left: ${padding}px" #if($editNode.getParentId()==$pn.key.getUuid())selected#end>${pn.key.getTitle()}</option>
-                                                    #if($pn.value.entrySet().size()>0)
+                                                    <option value="${pn.getEntity().getUuid()}" style="padding-left: ${padding}px" #if($editNode.getParentId()==$pn.getEntity().getUuid())selected#end>${pn.getEntity().getTitle()}</option>
+                                                    #if($pn.getLeaves().size()>0)
                                                         #set($level=$level+1)
-                                                        #iter_parent($pn.value)
+                                                        #iter_parent($pn.getLeaves())
                                                         #set($level=$level - 1)
                                                     #end
                                                 #end
                                             #end
-                                            #iter_parent($parents)
+                                            #iter_parent($parents.getRoots())
                                         </select>
                                     </div>
                                 </div>
