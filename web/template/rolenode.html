@@ -604,7 +604,7 @@
                                                 #foreach($pn in $parents)
                                                     #set($padding=$level*5)
                                                     <option value="${pn.getEntity().getUuid()}" data-parent="${pn.getEntity().getParentId()}" style="padding-left: ${padding}px" #is_role($pn.getEntity().getUuid())>${pn.getEntity().getRoleName()}</option>
-                                                    #if($pn.getLeaves().size()>0)
+                                                    #if($pn.hasLeaf())
                                                         #set($level=$level+1)
                                                         #iter_role($pn.getLeaves())
                                                         #set($level=$level - 1)
@@ -626,7 +626,7 @@
                                                 #foreach($pn in $parents)
                                                     #set($padding=$level*5)
                                                     <option value="${pn.getEntity().getUuid()}" style="padding-left: ${padding}px" #if($pn.getEntity().getNodeType() == 2)disabled#end>${pn.getEntity().getTitle()}</option>
-                                                    #if($pn.getLeaves().size()>0)
+                                                    #if($pn.hasLeaf())
                                                         #set($level=$level+1)
                                                         #iter_node($pn.getLeaves())
                                                         #set($level=$level - 1)
@@ -784,7 +784,7 @@
                 for(var i=0;i<json.length;i++){
                     str=str+"<option value='"+json[i].node_id+"' data-parent='"+json[i].parent_id+"' style='padding-left:"+level*5+"px'"+(json[i].selected==true ? " selected":"")+">"+json[i].title+"</option>";
                     if(json[i].selected==true)
-                        hasSelected.push(key);
+                        hasSelected.push(json[i].node_id);
                     level++;
                     str+=refresh(json[i].childs);
                     level--;
