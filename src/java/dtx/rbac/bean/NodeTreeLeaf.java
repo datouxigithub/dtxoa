@@ -21,8 +21,8 @@ public class NodeTreeLeaf {
     
     private Node entityNode;
     private List<NodeTreeLeaf> leaves;
-    public final static String NODEID="node-id";
-    public final static String PARENTID="parent-id";
+    public final static String NODEID="node_id";
+    public final static String PARENTID="parent_id";
     public final static String TITLE="title";
     public final static String SELECTED="selected";
     public final static String CHILDS="childs";

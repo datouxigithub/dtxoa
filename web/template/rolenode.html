@@ -601,17 +601,17 @@
                                         <select name="roles" class="form-control chzn-select">
                                             #set($level=0)
                                             #macro(iter_role $parents)
-                                                #foreach($pn in $parents.entrySet())
+                                                #foreach($pn in $parents)
                                                     #set($padding=$level*5)
-                                                    <option value="${pn.key.getUuid()}" data-parent="${pn.key.getParentId()}" style="padding-left: ${padding}px" #is_role($pn.key.getUuid())>${pn.key.getRoleName()}</option>
-                                                    #if($pn.value.entrySet().size()>0)
+                                                    <option value="${pn.getEntity().getUuid()}" data-parent="${pn.getEntity().getParentId()}" style="padding-left: ${padding}px" #is_role($pn.getEntity().getUuid())>${pn.getEntity().getRoleName()}</option>
+                                                    #if($pn.getLeaves().size()>0)
                                                         #set($level=$level+1)
-                                                        #iter_role($pn.value)
+                                                        #iter_role($pn.getLeaves())
                                                         #set($level=$level - 1)
                                                     #end
                                                 #end
                                             #end
-                                            #iter_role($roles)
+                                            #iter_role($roles.getRoots())
                                         </select>
                                     </div>
                                 </div>
@@ -623,17 +623,17 @@
                                         <select name="nodes" class="form-control chzn-select" multiple="">
                                             #set($level=0)
                                             #macro(iter_node $parents)
-                                                #foreach($pn in $parents.entrySet())
+                                                #foreach($pn in $parents)
                                                     #set($padding=$level*5)
-                                                    <option value="${pn.key.getUuid()}" style="padding-left: ${padding}px" #if($pn.key.getNodeType() == 2)disabled#end>${pn.key.getTitle()}</option>
-                                                    #if($pn.value.entrySet().size()>0)
+                                                    <option value="${pn.getEntity().getUuid()}" style="padding-left: ${padding}px" #if($pn.getEntity().getNodeType() == 2)disabled#end>${pn.getEntity().getTitle()}</option>
+                                                    #if($pn.getLeaves().size()>0)
                                                         #set($level=$level+1)
-                                                        #iter_node($pn.value)
+                                                        #iter_node($pn.getLeaves())
                                                         #set($level=$level - 1)
                                                     #end
                                                 #end
                                             #end
-                                            #iter_node($nodes)
+                                            #iter_node($nodes.getRoots())
                                         </select>
                                         </div>
                                     </div>
@@ -781,12 +781,12 @@
             
             function refresh(json){
                 var str="";
-                for(var key in json){
-                    str=str+"<option value='"+key+"' data-parent='"+json[key].parentId+"' style='padding-left:"+level*5+"px'"+(json[key].selected==true ? " selected":"")+">"+json[key].title+"</option>";
-                    if(json[key].selected==true)
+                for(var i=0;i<json.length;i++){
+                    str=str+"<option value='"+json[i].node_id+"' data-parent='"+json[i].parent_id+"' style='padding-left:"+level*5+"px'"+(json[i].selected==true ? " selected":"")+">"+json[i].title+"</option>";
+                    if(json[i].selected==true)
                         hasSelected.push(key);
                     level++;
-                    str+=refresh(json[key].childs);
+                    str+=refresh(json[i].childs);
                     level--;
                 }
                 return str;
