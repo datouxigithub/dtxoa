@@ -603,7 +603,7 @@
                                             #macro(iter_role $parents)
                                                 #foreach($pn in $parents)
                                                     #set($padding=$level*5)
-                                                    <option value="${pn.getEntity().getUuid()}" data-parent="${pn.getEntity().getParentId()}" style="padding-left: ${padding}px" #is_role($pn.getEntity().getUuid())>${pn.getEntity().getRoleName()}</option>
+                                                    <option value="${pn.getEntity().getUuid()}" data-parent="${pn.getEntity().getParentId()}" style="padding-left: ${padding}px">${pn.getEntity().getRoleName()}</option>
                                                     #if($pn.hasLeaf())
                                                         #set($level=$level+1)
                                                         #iter_role($pn.getLeaves())
